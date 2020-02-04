@@ -1,0 +1,180 @@
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+body {
+  padding-top: 56px;
+}
+
+table {
+  font-size: .875rem;
+}
+
+table .fa-fw {
+  margin-right: 5px;
+  color: #2e2e2e;
+}
+
+table .tree-entity {
+  width: 100%;
+}
+
+table .tree-entity:hover {
+  cursor: pointer;
+}
+
+.underline-hover:hover {
+   text-decoration: underline;
+}
+
+table thead tr th {
+ font-weight: normal;
+}
+
+.matrix {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
+
+.matrix table thead tr th,
+.matrix table tbody tr td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-left: 1px solid rgb(229, 229, 229);
+  border-right: 1px solid rgb(229, 229, 229);
+}
+
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+  margin-top: 5px;
+}
+
+.info-block {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  line-height: 1;
+  border-radius: 3px;
+}
+
+.rounded {
+    border: 1px solid #e5e5e5;
+}
+
+table thead tr th,
+table tbody tr td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+
+.bordered-box {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+}
+
+.tree-file {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table {
+  width: 100%;
+  border-color: #e5e5e5;
+  color: #2e2e2e;
+}
+
+table tr {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+@media (max-width: 991.98px) {
+  .offcanvas-collapse {
+    position: fixed;
+    top: 56px; /* Height of navbar */
+    bottom: 0;
+    left: 100%;
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    overflow-y: auto;
+    visibility: hidden;
+    background-color: #343a40;
+    transition: visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+    transition: transform .3s ease-in-out, visibility .3s ease-in-out;
+    transition: transform .3s ease-in-out, visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+  }
+  .offcanvas-collapse.open {
+    visibility: visible;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}
+
+.navbar-brand {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  margin-top: -1px;
+  overflow-x: auto;
+  color: rgba(255, 255, 255, .75);
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-underline .nav-link {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: .875rem;
+  color: #6c757d;
+}
+
+.nav-underline .nav-link:hover {
+  color: #007bff;
+}
+
+.nav-underline .active {
+  font-weight: 500;
+  color: #343a40;
+}
+
+.text-white-50 { color: rgba(255, 255, 255, .5); }
+
+.bg-blue { background-color: rgb(0, 123, 255); }
+
+.lh-100 { line-height: 1; }
+.lh-125 { line-height: 1.25; }
+.lh-150 { line-height: 1.5; }
+
+.fixed-top {
+  position: absolute;
+}
