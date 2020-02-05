@@ -25,7 +25,7 @@ class PhysicalProject:
                         'Dockerfile', '.classpath', 'mvnw', '.coveragerc', '.npmignore']
 
     CODE_FILE_PREFIXES = ['.py', '.c', '.cpp', '.js', '.java', '.cs', '.ts',
-                          '.jsx', '.tsx', '.scala', '.sc']
+                          '.jsx', '.tsx', '.scala', '.sc', '.php', '.go', '.swift']
 
     UI_FILE_PREFIXES = ['.html', '.css', '.htmlx', '.htm', '.aspx', '.fxml', '.jsp']
 

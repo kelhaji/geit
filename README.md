@@ -18,6 +18,7 @@ Geit is a tool developed to aggregate contribution data of developers in a softw
 - Heuristically points out developers who are performing below average, above average, or need attention in certain categories
 - Shows project files and folders with percentage of contribution for each developer
 - Displays overall commit distribution for last 60 days
+- Supports most widely used programming languages
 
 ## Requirements
 
