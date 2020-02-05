@@ -32,7 +32,7 @@ Install the latest version using PIP:
 ```
 pip install geit
 ```
-
+Note that Geit is currently in alpha and still under development. 
 
 ## How to run
 
