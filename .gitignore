@@ -6,8 +6,8 @@ __pycache__/
 # Testing
 img/
 webpage/node_modules/
-webpage/client/examples/
-webpage/client/public/
+webpage/src/client/examples/
+webpage/src/client/public/
 index_****.html
 index_[0-9][0-9][0-9][0-9].html
 
