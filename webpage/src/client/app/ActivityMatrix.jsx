@@ -80,7 +80,7 @@ export default class ActivityMatrix extends React.Component {
                     all branches. <br /> Reverting commits may significantly skew contribution data.</span>
             </small>
         </ContainerComponent>
-        <ContainerComponent title={"Issues & Merge Requests Contribution Comparison Matrices"}>
+          { Object.keys(data.matrix.merge_requests).length == 0 || Object.keys(data.matrix.issues).length == 0 ? null : <ContainerComponent title={"Issues & Merge Requests Contribution Comparison Matrices"}>
             {/*<div className="matrix bordered-box">*/}
             {/*    {generateMatrix(data.matrix.issues)}*/}
             {/*</div>*/}
@@ -101,8 +101,7 @@ export default class ActivityMatrix extends React.Component {
                     only lists users <br /> that have created issues or merge requests (respectively) at some point.</span>
                 {/*The merge requests matrix only lists users that have created a merge requests at some point.</span>*/}
             </small>
-
-        </ContainerComponent>
+        </ContainerComponent>}
       </div>
     );
   }
