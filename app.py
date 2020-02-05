@@ -19,10 +19,10 @@ from src.activity_matrix import ActivityMatrix
 def handle_cli(gitlab_url, gitlab_api_key, gitlab_project_id, output):
     platform_project = GitLabProject(gitlab_url, gitlab_api_key, gitlab_project_id)
 
-    temp_folder_name = "temp_" + int(time.time())
+    temp_folder_name = "temp_" + str(int(time.time()))
 
     shutil.rmtree(temp_folder_name, ignore_errors=True)
-    physical_project = PhysicalProject('temp', platform_project.get_ssh_url())
+    physical_project = PhysicalProject(temp_folder_name, platform_project.get_ssh_url())
 
     matrix = ActivityMatrix(physical_project, platform_project)
 
