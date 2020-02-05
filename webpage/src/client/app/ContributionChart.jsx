@@ -50,29 +50,28 @@ export default class ContributionChart extends PureComponent {
 
   render() {
     return (
-                <div style={{ width: '100%', height: 400 }}>
+        <div style={{ width: '100%', height: 400 }}>
           <ResponsiveContainer>
-      <BarChart
-        data={chartData}
-        margin={{
-          top: 30, right: 50, left: 0, bottom: 20,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" tick={{fontSize: 14}} />
-        <YAxis tick={{fontSize: 14}} />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="code" name="Code" stackId="a" fill="#8884d8" />
-        <Bar dataKey="documentation" name="Documentation" stackId="a" fill="#82ca9d" />
-        <Bar dataKey="user_interface" name="User interface" stackId="a" fill="#0088FE" />
-        <Bar dataKey="test" name="Test" stackId="a" fill="#00C49F" />
-        <Bar dataKey="comments" name="Comments" stackId="a" fill="#FFBB28" />
-        <Bar dataKey="configuration" name="Configuration" stackId="a" fill="#FF8042" />
-      </BarChart>
+              <BarChart
+                data={chartData}
+                margin={{
+                  top: 30, right: 50, left: 0, bottom: 20,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" tick={{fontSize: 14}} />
+                <YAxis tick={{fontSize: 14}} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="code" name="Code" stackId="1" fill="#8884d8" />
+                <Bar dataKey="test" name="Tests" stackId="1" fill="#00C49F" />
+                <Bar dataKey="comments" name="Comments" stackId="1" fill="#FFBB28" />
+                <Bar dataKey="configuration" name="Configuration" stackId="1" fill="#FF8042" />
+                <Bar dataKey="user_interface" name="User interface" stackId="1" fill="#0088FE" />
+                <Bar dataKey="documentation" name="Documentation" stackId="1" fill="#82ca9d" />
+              </BarChart>
           </ResponsiveContainer>
-                </div>
-
+        </div>
     );
   }
 }

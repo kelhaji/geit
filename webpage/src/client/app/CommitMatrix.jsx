@@ -1,5 +1,5 @@
 import React from 'react';
-import { sum, std, median }  from 'mathjs';
+import { sum }  from 'mathjs';
 
 const cutEmail = (email) => {
     return email.split('@')[0]
@@ -17,7 +17,7 @@ const formattedName = (name) => {
 const generateContributionMatrix = (targetData) => {
   const dataKeys = Object.keys(targetData);
 
-    // https://stackoverflow.com/questions/21700773/javascripts-sort-method-handling-of-capital-letters
+    // Based off https://stackoverflow.com/questions/21700773/javascripts-sort-method-handling-of-capital-letters
     dataKeys.sort(function (a, b) {
         return a.localeCompare(b);
     });
@@ -53,7 +53,7 @@ const generateContributionMatrix = (targetData) => {
             }
         }
 
-        if (key == 'median_committed_lines' || key == 'average_committed_lines') {
+        if (key == 'median_of_lines_per_commit' || key == 'average_of_lines_per_commit') {
             if (value >= 500) {
                 return '#69b1ff';
             } else {

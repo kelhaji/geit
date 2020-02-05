@@ -65,7 +65,7 @@ export default class ActivityMatrix extends React.Component {
   render() {
     return (
       <div>
-        <ContainerComponent title={"Code & Commit Contribution Matrices"}>
+        <ContainerComponent title={"Code & Commit Contribution Comparison Matrices"}>
             <ContributionMatrix />
             <hr></hr>
             <CommitMatrix />
@@ -80,7 +80,7 @@ export default class ActivityMatrix extends React.Component {
                     all branches. <br /> Reverting commits may significantly skew contribution data.</span>
             </small>
         </ContainerComponent>
-        <ContainerComponent title={"Issues & Merge Requests Contribution Matrices"}>
+        <ContainerComponent title={"Issues & Merge Requests Contribution Comparison Matrices"}>
             {/*<div className="matrix bordered-box">*/}
             {/*    {generateMatrix(data.matrix.issues)}*/}
             {/*</div>*/}

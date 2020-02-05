@@ -209,14 +209,14 @@ class ActivityMatrix:
                 aggregate_object[committer] = {
                     "total_commits": 0,
                     "large_commit_ratio": 0,
-                    "median_committed_lines": 0,
-                    "average_committed_lines": 0
+                    "median_of_lines_per_commit": 0,
+                    "average_of_lines_per_commit": 0
                 }
 
             aggregate_object[committer]["total_commits"] = commit_statistics[committer]["count"]
             aggregate_object[committer]["large_commit_ratio"] = commit_statistics[committer]["large_commit_ratio"]
-            aggregate_object[committer]["median_committed_lines"] = commit_statistics[committer]["lines"]["median"]
-            aggregate_object[committer]["average_committed_lines"] = commit_statistics[committer]["lines"]["mean"]
+            aggregate_object[committer]["median_of_lines_per_commit"] = commit_statistics[committer]["lines"]["median"]
+            aggregate_object[committer]["average_of_lines_per_commit"] = commit_statistics[committer]["lines"]["mean"]
 
         return aggregate_object
 

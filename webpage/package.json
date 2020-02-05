@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "./node_modules/.bin/webpack -d --watch",
-    "minimize": "./node_modules/.bin/webpack -d --optimize-minimize",
+    "minimize": "./node_modules/.bin/webpack --mode production -d --optimize-minimize",
     "run": "./node_modules/.bin/webpack -d"
   },
   "author": "Khalid El Haji",

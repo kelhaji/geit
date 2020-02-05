@@ -24,17 +24,25 @@ var config = {
     minimize: true,
     minimizer: [
       new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
         uglifyOptions: {
-          warnings: false,
-          parse: {},
-          compress: {},
+          compress: {
+            sequences: true,
+            dead_code: true,
+            conditionals: true,
+            booleans: true,
+            unused: true,
+            if_return: true,
+            join_vars: true,
+            drop_console: true
+          },
+          ecma: 6,
           mangle: true,
-          output: null,
-          toplevel: true,
-          nameCache: null,
-          ie8: false,
-          keep_fnames: false,
-        },
+          output: {
+            comments: false
+          },
+        }
       }),
     ],
   },

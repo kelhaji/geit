@@ -18,13 +18,17 @@ class App extends React.Component {
 
         <ActivityMatrix />
 
-        <ContainerComponent title={"Contribution Tree"}>
+        <ContainerComponent title={"Files & Folder Contribution"}>
             <ContributionTree />
         </ContainerComponent>
 
         <ContainerComponent title={"Overall Commit Distribution"}>
             <CommitChart />
         </ContainerComponent>
+
+          <div class="my-3 p-3 bg-white rounded footer">
+              Created by <a href="https://github.com/kelhaji" target="_blank" rel="noopener noreferrer">@kelhaji</a> on GitHub. Icon used in logo made by Freepik from <a href="http://www.flaticon.com/" target="_blank" rel="noopener noreferrer">www.flaticon.com</a>.
+          </div>
       </div>
     );
   }

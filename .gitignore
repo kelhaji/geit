@@ -8,6 +8,8 @@ img/
 webpage/node_modules/
 webpage/client/examples/
 webpage/client/public/
+index_****.html
+index_[0-9][0-9][0-9][0-9].html
 
 # IDE
 .idea

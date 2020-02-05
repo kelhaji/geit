@@ -79,8 +79,6 @@ const generateFolderTree = (folderTree, accessSubFolder) => {
       return b.value - a.value;
     });
 
-    folderTree[key].is_file !== true
-
     const isFolder = folderTree[key].is_file !== true;
 
     return (

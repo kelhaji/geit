@@ -1,5 +1,5 @@
 import React from 'react';
-import { sum, std, median }  from 'mathjs';
+import { sum }  from 'mathjs';
 
 const cutEmail = (email) => {
     return email.split('@')[0]
@@ -48,7 +48,7 @@ const generateContributionMatrix = (targetData) => {
             return '#69b1ff';
         }
 
-        // https://everything2.com/title/comment-to-code+ratio
+        // Based off https://everything2.com/title/comment-to-code+ratio
         if (key == 'comments') {
             const commentRatio = value / (targetData[user]['code'] + targetData[user]['test']);
 
@@ -87,7 +87,7 @@ const generateContributionMatrix = (targetData) => {
 
   return (
     <table>
-                      <colgroup>
+        <colgroup>
         <col style={{width: '20%'}}/>
       </colgroup>
       <thead>
