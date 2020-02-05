@@ -1,10 +1,10 @@
-[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
 
 <p align="center">
   <p align="center">
-     <img src="/logos/logo-white.png" alt="Geit" width="400">
+     <img src="https://github.com/kelhaji/geit/blob/master/logos/logo-white.png?raw=true" alt="Geit" width="400">
   </p>
   <p align="center">
     <b>G</b>it <b>e</b>ducational <b>i</b>nsights <b>t</b>ool. Because f*#k slackers.
