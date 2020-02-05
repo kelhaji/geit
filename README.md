@@ -9,7 +9,7 @@
 
 ## About Geit
 
-Geit is a tool developed to aggregate contribution data of developers in a software development group project. It is designed for teachers and teaching assistants to asses an entire group project and its individual members in terms of their code contributions behaviour.
+Geit is a tool developed to aggregate contribution data of developers in a software development group project that uses Git. It is designed for teachers and teaching assistants to asses an entire group project and its individual members in terms of their code contributions behaviour.
 
 ## Features
 
@@ -22,7 +22,7 @@ Geit is a tool developed to aggregate contribution data of developers in a softw
 ## Requirements
 
 - [Python 3.6](https://www.python.org/downloads/) or greater
-- [Python PIP](https://pypi.org/project/pip/)
+- [PIP](https://pypi.org/project/pip/)
 - [Git](https://git-scm.com/)
 
 ## Installation
