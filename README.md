@@ -44,7 +44,7 @@ Note that Geit is currently in alpha and still under development.
 ## How to run
 
 ```
-python geit.py geit --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
+python geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
 
 ```
 
