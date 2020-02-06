@@ -31,17 +31,20 @@ Geit is a tool developed to aggregate contribution data of developers in a softw
 - [Git](https://git-scm.com/)
 
 ## Installation
-Install the latest version using PIP:
+Install the latest version using the following instructions:
 
 ```
-pip install geit
+git clone https://github.com/kelhaji/geit
+cd geit
+pip install -r requirements.txt
 ```
+
 Note that Geit is currently in alpha and still under development. 
 
 ## How to run
 
 ```
-geit --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
+python geit.py geit --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
 
 ```
 

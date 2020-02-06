@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name='Geit',
     packages=setuptools.find_packages(),
-    version='0.0.1',
+    version='0.0.2',
     license='MIT',
     description='Geit provides contribution insights on software group projects that use Git',
     author='Khalid El Haji',
@@ -16,12 +16,6 @@ setuptools.setup(
     keywords=['GIT', 'INSIGHTS', 'STATISTICS', 'EDUCATIONAL', 'CONTRIBUTIONS', 'DATA'],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=[
-        'GitPython',
-        'binaryornot',
-        'Click',
-        'python'
-    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Education',
