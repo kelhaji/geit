@@ -53,6 +53,13 @@ class PhysicalProject:
 
         return len(branches.split('\n')) - 1
 
+    def get_committer_count(self):
+        """Get number of committers."""
+        committers = self.repo.git.shortlog('-sne', all=True)
+
+        return len(committers.split('\n')) - 1
+
+
     @staticmethod
     def __commit_stats(commit_stat_type, all_stats_total):
         """Calculates statistics using a certain commit statistics

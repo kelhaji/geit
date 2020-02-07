@@ -24,6 +24,13 @@ def handle_cli(gitlab_url, gitlab_api_key, gitlab_project_id, output):
     shutil.rmtree(temp_folder_name, ignore_errors=True)
     physical_project = PhysicalProject(temp_folder_name, platform_project.get_ssh_url())
 
+    committer_count = physical_project.get_committer_count()
+
+    if committer_count > 24:
+        shutil.rmtree(temp_folder_name, ignore_errors=True)
+        print("Repository has more than 24 (exactly " + str(committer_count) + ") committers. This is currently not supported.")
+        return
+
     matrix = ActivityMatrix(physical_project, platform_project)
 
     physical_data = {

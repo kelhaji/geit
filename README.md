@@ -22,8 +22,8 @@ Geit is a tool developed to aggregate contribution data of developers in a softw
 - Shows issues and merge requests contribution activity
 - Heuristically points out developers who are performing below average, above average, or need attention in certain categories
 - Shows project files and folders with percentage of contribution for each developer
-- Displays overall commit distribution for last 60 days
-- Supports up to 12 developers per group project (per Git repository)
+- Displays overall commit distribution since inception of project
+- Supports up to 24 developers per group project (per Git repository)
 - GitLab integration
 
 ## Requirements
