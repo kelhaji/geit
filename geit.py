@@ -61,7 +61,7 @@ def write_json_output(data, project_id):
 
 
 def write_html_output(data, project_id):
-    f = open("webpage/src/client/index.html", "r")
+    f = open("webpage/src/client/public/index.html", "r")
     index_file = f.read()
 
     updated_file = re.sub(r'<script tag="data-entry-tag">.*<\/script>',
