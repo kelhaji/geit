@@ -9,7 +9,9 @@ webpage/node_modules/
 webpage/src/client/examples/
 webpage/src/client/public/
 index_****.html
+data_****.json
 index_[0-9][0-9][0-9][0-9].html
+data_[0-9][0-9][0-9][0-9].json
 
 # IDE
 .idea
