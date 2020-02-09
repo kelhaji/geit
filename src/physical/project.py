@@ -18,16 +18,19 @@ class PhysicalProject:
     """Responsible for extracting and summarizing GIT repository data."""
 
     CONFIG_FILE_PREFIXES = ['.yml', '.whl', '.cfg', '.xml',
-                            '.config', '.properties', '.rss', '.cmd']
+                            '.config', '.properties', '.rss', '.cmd', '.pub']
     CONFIG_FILENAMES = ['requirements-dev.txt', 'requirements_dev.txt',
                         'requirements.txt', 'setup.py', 'GruntFile.js',
                         'package.json', 'package-lock.json', '.gitignore', '.gitkeep',
-                        'Dockerfile', '.classpath', 'mvnw', '.coveragerc', '.npmignore']
+                        'Dockerfile', '.classpath', 'mvnw', '.coveragerc', '.npmignore',
+                        '.env', '.eslintignore', '.eslintrc.js']
 
     CODE_FILE_PREFIXES = ['.py', '.c', '.cpp', '.js', '.java', '.cs', '.ts',
-                          '.jsx', '.tsx', '.scala', '.sc', '.php', '.go', '.swift']
+                          '.jsx', '.tsx', '.scala', '.sc', '.php', '.go', '.swift',
+                          '.h']
 
-    UI_FILE_PREFIXES = ['.html', '.css', '.htmlx', '.htm', '.aspx', '.fxml', '.jsp']
+    UI_FILE_PREFIXES = ['.html', '.css', '.htmlx', '.htm', '.aspx', '.fxml',
+                        '.jsp', '.ui']
 
     DOC_FILENAMES = ['README', 'LICENSE', 'SECURITY', 'CONTRIBUTING', 'CHANGELOG',
                      'BUILDING']
@@ -42,6 +45,7 @@ class PhysicalProject:
         self.repo = Repo.init()
 
         if not os.path.isdir(folder):
+            print("Cloning repo (" + self.ssh_url + ")...")
             self.repo.clone_from(self.ssh_url, self.folder)
             self.repo = Repo.init(folder)
         else:

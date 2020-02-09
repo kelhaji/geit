@@ -33,31 +33,48 @@ def handle_cli(gitlab_url, gitlab_api_key, gitlab_project_id, output):
 
     matrix = ActivityMatrix(physical_project, platform_project)
 
-    physical_data = {
-        "commits": physical_project.get_commit_statistics(),
-        "contribution": {
-            "tree": physical_project.get_all_contributions(),
-            "types": physical_project.get_types_of_contributions()
-        },
-        "matrix": matrix.get_aggregate_matrix_activity_data()
+    physical_data = dict()
+
+    print("Collecting commit statistics...")
+    physical_data["commits"] = physical_project.get_commit_statistics()
+
+    print("Collecting and analyzing contribution data...")
+    physical_data["contribution"] = {
+        "tree": physical_project.get_all_contributions(),
+        "types": physical_project.get_types_of_contributions()
     }
+
+    print("Collecting and generating issues, merge requests, "
+          "commits, and contribution matrices...")
+    physical_data["matrix"] = matrix.get_aggregate_matrix_activity_data()
 
     json_physical_data = json.dumps(physical_data)
 
+    filename = None
+
     if output == 'html':
-        write_html_output(json_physical_data, gitlab_project_id)
+        print("Writing HTML output...")
+        filename = write_html_output(json_physical_data, gitlab_project_id)
     elif output == 'json':
-        write_json_output(json_physical_data, gitlab_project_id)
+        print("Writing JSON output...")
+        filename = write_json_output(json_physical_data, gitlab_project_id)
     else:
         print(json_physical_data)
+
+    if filename:
+        print("Done. See output at: " + filename)
 
     shutil.rmtree(temp_folder_name, ignore_errors=True)
 
 
 def write_json_output(data, project_id):
-    f = open("data_" + project_id + ".json", "w+")
+    filename = "data_" + project_id + ".json"
+
+    f = open(filename, "w+")
     f.write(data)
     f.close()
+
+    return filename
 
 
 def write_html_output(data, project_id):
@@ -69,9 +86,13 @@ def write_html_output(data, project_id):
                           index_file)
     f.close()
 
-    f = open("index_" + project_id + ".html", "w+")
+    filename = "index_" + project_id + ".html"
+
+    f = open(filename, "w+")
     f.write(updated_file)
     f.close()
+
+    return filename
 
 
 if __name__ == '__main__':

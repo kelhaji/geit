@@ -61,7 +61,7 @@ export default class CommitChart extends Component {
                         <CartesianGrid strokeDasharray="3 3"/>
                         <XAxis dataKey="day" tick={{fontSize: 14}} tickMargin={15}
                                height={50}
-                               interval={Math.floor(finalData.length / 10)}/>
+                               interval={Math.max(Math.floor(finalData.length / 10), 1)}/>
                         <YAxis tick={{fontSize: 14}}/>
                         <Tooltip/>
                         <ReferenceLine y={0} stroke="#000"/>

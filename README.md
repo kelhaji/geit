@@ -56,6 +56,3 @@ python geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --
 
 ```
 The default output type is HTML.
-
-
-Note that currently only GitLab is supported. GitHub and plain Git support will be introduced later this week.
