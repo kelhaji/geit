@@ -50,10 +50,14 @@ class ActivityMatrix:
             "total_issues": len(issues),
             "total_notes_on_issues": total_notes_on_issues,
             "total_system_notes_on_issues": total_system_notes_on_issues,
-            "total_closed_issues":  len([1 for issue in issues if issue["state"] == "closed"]),
-            "average_time_in_hours_estimated_on_issues": (mean([issue["time_stats"]["time_estimate"] for issue in issues]) / 60) / 60,
-            "average_time_in_hours_all_assignees_spent_on_issues": (mean([issue["time_stats"]["total_time_spent"] for issue in issues]) / 60) / 60,
-            "total_time_spent_in_hours_individually_on_all_issues": (total_time_spent_individually_on_issues / 60) / 60,
+            "total_closed_issues":
+                len([1 for issue in issues if issue["state"] == "closed"]),
+            "average_time_in_hours_estimated_on_issues":
+                (mean([issue["time_stats"]["time_estimate"] for issue in issues]) / 60) / 60,
+            "average_time_in_hours_all_assignees_spent_on_issues":
+                (mean([issue["time_stats"]["total_time_spent"] for issue in issues]) / 60) / 60,
+            "total_time_spent_in_hours_individually_on_all_issues":
+                (total_time_spent_individually_on_issues / 60) / 60,
             "average_assignees_per_issue": mean([len(issue["assignees"]) for issue in issues]),
             "total_times_assigned_to_issues": total_times_assigned_to_issues,
             "total_issues_self_assigned_only": len([1 for issue in issues
@@ -104,7 +108,8 @@ class ActivityMatrix:
         date_format = self.git_platform.get_date_format()
 
         for merge_request in merge_requests:
-            if merge_request["closed_at"] is not None or merge_request["merged_at"] is not None:
+            if merge_request["closed_at"] is not None or\
+                    merge_request["merged_at"] is not None:
                 finish_time = 0
 
                 created_at = datetime. \
@@ -124,13 +129,16 @@ class ActivityMatrix:
 
         return mean(life_time_merge_requests)
 
-    def __extract_user_merge_request_statistics(self, merge_requests, all_merge_requests, username):
+    def __extract_user_merge_request_statistics(self,
+                                                merge_requests, all_merge_requests,
+                                                username):
         """Extract merge request statistics related to a single user."""
         total_notes_on_merge_requests = 0
         total_system_notes_on_merge_requests = 0
         total_times_merged = 0
         total_times_assigned_to_merge_requests = 0
-        average_lifetime_of_merge_requests = self.__get_average_lifetime_of_merge_requests(merge_requests)
+        average_lifetime_of_merge_requests = \
+            self.__get_average_lifetime_of_merge_requests(merge_requests)
 
         for merge_request in all_merge_requests:
             for note in merge_request["notes"]:
@@ -140,7 +148,8 @@ class ActivityMatrix:
                     else:
                         total_notes_on_merge_requests += 1
 
-            if merge_request["merged_by"] is not None and merge_request["merged_by"]["username"] == username:
+            if merge_request["merged_by"] is not None \
+                    and merge_request["merged_by"]["username"] == username:
                 total_times_merged += 1
 
             for assignee in merge_request["assignees"]:
@@ -213,10 +222,14 @@ class ActivityMatrix:
                     "average_of_lines_per_commit": 0
                 }
 
-            aggregate_object[committer]["total_commits"] = commit_statistics[committer]["count"]
-            aggregate_object[committer]["large_commit_ratio"] = commit_statistics[committer]["large_commit_ratio"]
-            aggregate_object[committer]["median_of_lines_per_commit"] = commit_statistics[committer]["lines"]["median"]
-            aggregate_object[committer]["average_of_lines_per_commit"] = commit_statistics[committer]["lines"]["mean"]
+            aggregate_object[committer]["total_commits"] = \
+                commit_statistics[committer]["count"]
+            aggregate_object[committer]["large_commit_ratio"] = \
+                commit_statistics[committer]["large_commit_ratio"]
+            aggregate_object[committer]["median_of_lines_per_commit"] = \
+                commit_statistics[committer]["lines"]["median"]
+            aggregate_object[committer]["average_of_lines_per_commit"] = \
+                commit_statistics[committer]["lines"]["mean"]
 
         return aggregate_object
 

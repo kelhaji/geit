@@ -5,6 +5,7 @@ import gitlab
 
 
 class GitLabProject:
+    """Responsible retrieving information on GitLab projects."""
 
     DATE_FORMAT = '%Y-%m-%dT%H:%M:%S.%f%z'
 
@@ -18,9 +19,11 @@ class GitLabProject:
         self.gitlab_project = self.gitlab.projects.get(self.project_id)
 
     def get_date_format(self):
+        """Get date format that is used in Gitlab's API."""
         return self.DATE_FORMAT
 
     def get_users(self):
+        """Get all users in of the project."""
         users = []
         for user in self.gitlab_project.users.list(all=True):
             users.append({
@@ -32,9 +35,12 @@ class GitLabProject:
         return users
 
     def get_ssh_url(self):
+        """Get SSH url for cloning."""
         return self.gitlab_project.attributes['ssh_url_to_repo']
 
     def get_all_issues(self, include_notes=False):
+        """Get all issues with all their metadata and optionally including
+        their notes (comments)."""
         issues = []
 
         for issue in self.gitlab_project.issues.list(all=True):
@@ -49,6 +55,8 @@ class GitLabProject:
         return issues
 
     def get_all_merge_requests(self, include_notes=False, include_changes=False):
+        """Get all merge request with all their metadata and optionally including
+        their notes (comments)."""
         merge_requests = []
 
         for merge_request in self.gitlab_project.mergerequests.list(all=True):
