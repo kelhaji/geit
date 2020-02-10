@@ -1,0 +1,6 @@
+[submodule "geit-test-repo"]
+	path = geit-test-repo
+	url = git@gitlab.com:kelhaji/geit-test-repo.git
+[submodule "tests/resources/geit-test-repo"]
+	path = tests/resources/geit-test-repo
+	url = git@gitlab.com:kelhaji/geit-test-repo.git

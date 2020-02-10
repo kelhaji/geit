@@ -56,6 +56,8 @@ class PhysicalProject:
         the remote number of branches."""
         branches = self.repo.git.branch('-r')
 
+        print(self.repo.git.branch('-r').split('\n'))
+
         if branches == "":
             return 0
 
@@ -220,7 +222,11 @@ class PhysicalProject:
         for (dir_path, dir_names, filenames) in walk('./' + self.folder):
             if ".git" not in dir_path:
                 for filename in filenames:
+                    if filename == ".git":
+                        continue
+
                     path = dir_path.replace('./' + self.folder, '')
+
                     if path == '':
                         file_paths.append(filename)
                         return_filenames.append(filename)

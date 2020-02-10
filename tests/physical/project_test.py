@@ -8,7 +8,7 @@ from src.physical.project import PhysicalProject
 class TestProject:
     """We use a test repo (that is added as a submodule to the Geit repo) to verify
     the behaviour of PhysicalProject functions."""
-    project = PhysicalProject("../resources/test-repo")
+    project = PhysicalProject("../resources/geit-test-repo")
 
     # Constants derived from test-repo
     AMOUNT_OF_INSERTIONS_IN_TEST_REPO = 21
@@ -17,14 +17,16 @@ class TestProject:
     COMMIT_RATIO = 0.0
     AMOUNT_OF_COMMENTS = 10
     AMOUNT_OF_CODE = 11
+    AMOUNT_OF_BRANCHES = 2
+    AMOUNT_OF_COMMITTERS = 1
     FILE_PATHS = ['comments.c', 'comments.py']
 
     def test_number_of_branches(self):
         # Note this function returns the remote number of branches
-        assert self.project.get_number_of_branches() is 0
+        assert self.project.get_number_of_branches() is self.AMOUNT_OF_BRANCHES
 
     def test_get_committer_count(self):
-        assert self.project.get_committer_count() is 1
+        assert self.project.get_committer_count() is self.AMOUNT_OF_COMMITTERS
 
     def test_get_commit_count(self):
         assert self.project.get_commit_count() == self.AMOUNT_OF_COMMITS_IN_TEST_REPO
