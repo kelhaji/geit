@@ -52,17 +52,23 @@ class PhysicalProject:
             self.repo = Repo.init(folder)
 
     def get_number_of_branches(self):
-        """Get number of branches."""
+        """Get number of branches. Note that this returns
+        the remote number of branches."""
         branches = self.repo.git.branch('-r')
 
-        return len(branches.split('\n')) - 1
+        if branches == "":
+            return 0
+
+        return len(branches.split('\n'))
 
     def get_committer_count(self):
         """Get number of committers."""
         committers = self.repo.git.shortlog('-sne', all=True)
 
-        return len(committers.split('\n')) - 1
+        if committers == "":
+            return 0
 
+        return len(committers.split('\n'))
 
     @staticmethod
     def __commit_stats(commit_stat_type, all_stats_total):
@@ -357,7 +363,7 @@ class PhysicalProject:
 
             # Regex thanks to https://blog.ostermiller.org/find-comment
             for comment in re.finditer(
-                    "(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)", original_file):
+                    r"(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)", original_file):
                 self.__count_regex_based_comment_contribution(original_file,
                                                               comment,
                                                               file_contribution_metadata,
@@ -373,7 +379,7 @@ class PhysicalProject:
         if len(email_and_line_combined) == 0:
             return
 
-        for _ in range(len(email_and_line_combined) + 1):
+        for _ in range(len(email_and_line_combined)):
             if len(excluded_lines) > 0:
                 if line_number not in excluded_lines:
                     Util.add_count_to_identifier(
