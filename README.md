@@ -18,11 +18,17 @@ Geit is a tool developed to aggregate contribution data of developers in a softw
 
 ## Features
 
-- Shows contributions by contribution types (code, documentation, user interface, etc.) for each developer
-- Shows issues and merge requests contribution activity
+- Shows contributions by contribution types for each developer. Contribution types are:
+    - Code contributions
+    - Test contributions
+    - Comment contributions
+    - Configuration contributions
+    - User interface contributions
+    - Documentation contributions
 - Heuristically points out developers who are performing below average, above average, or need attention in certain categories
 - Shows project files and folders with percentage of contribution for each developer
 - Displays overall commit distribution since inception of project
+- Shows issues and merge requests contribution activity (if possible)
 - Supports up to 24 developers per group project (per Git repository)
 - GitLab integration
 
