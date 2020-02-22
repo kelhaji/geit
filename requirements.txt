@@ -2,3 +2,4 @@ GitPython==2.1.11
 binaryornot==0.4.4
 Click==7.0
 python-gitlab==1.8.0
+gitdb2==3.0.1
