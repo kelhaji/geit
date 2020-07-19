@@ -45,7 +45,6 @@ Install the latest version using the following instructions:
 git clone https://github.com/kelhaji/geit
 cd geit
 pip install -r requirements.txt
-
 ```
 
 ## How to use
@@ -53,13 +52,11 @@ pip install -r requirements.txt
 You can generate a report by running the following command:
 ```
 python geit.py --target-repo /path/to/repo
-
 ```
 
 You can also specify the output type:
 ```
 python geit.py --target-repo /path/to/repo --output json
-
 ```
 The default output type is HTML.
 
@@ -68,5 +65,4 @@ The default output type is HTML.
 You can generate a report by running the following command:
 ```
 python geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
-
 ```
