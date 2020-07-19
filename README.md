@@ -25,7 +25,7 @@ Geit is a tool developed to aggregate contribution data of developers in a softw
     - Configuration contributions
     - User interface contributions
     - Documentation contributions
-- Heuristically points out developers who are performing below average, above average, or need attention in certain categories
+- Heuristically points out developers who are performing below average, above average, or need attention
 - Shows project files and folders with percentage of contribution for each developer
 - Displays overall commit distribution since inception of project
 - Shows issues and merge requests contribution activity (if possible)
@@ -45,20 +45,28 @@ Install the latest version using the following instructions:
 git clone https://github.com/kelhaji/geit
 cd geit
 pip install -r requirements.txt
+
 ```
 
-Note that Geit is currently in alpha and still under development. 
+## How to use
 
-## How to run
 You can generate a report by running the following command:
 ```
-python geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
+python geit.py --target-repo /path/to/repo
 
 ```
 
 You can also specify the output type:
 ```
-python geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID> --output json
+python geit.py --target-repo /path/to/repo --output json
 
 ```
 The default output type is HTML.
+
+### Usage with GitLab
+
+You can generate a report by running the following command:
+```
+python geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
+
+```

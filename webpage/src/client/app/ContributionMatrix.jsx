@@ -30,11 +30,21 @@ const generateContributionMatrix = (targetData) => {
             return targetData[user][key];
         });
 
-        const mean = Util.sum(allDataPoints) / allDataPoints.length;
+        const total = Util.sum(allDataPoints);
+
+        const mean = total / allDataPoints.length;
         const poorlyPerformingThreshold = mean - 0.5 * mean;
         const overPerformingThreshold = 2 * mean;
 
         const performanceColor = (value, user) => {
+            if (total == 0 && (key === 'code' || key === 'test' || key == 'comments')) {
+                return '#69b1ff';
+            }
+
+            if (total == 0 && (key === 'user_interface' || key === 'documentation' || key == 'configuration')) {
+                return '';
+            }
+
             if ((key === 'code' || key === 'test' || key === 'comments') && value === 0) {
                 return '#69b1ff';
             }

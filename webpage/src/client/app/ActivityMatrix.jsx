@@ -38,7 +38,7 @@ export default class ActivityMatrix extends React.Component {
                     all branches. <br/> Reverting commits may significantly skew contribution data.</span>
                     </small>
                 </ContainerComponent>
-                {Object.keys(data.matrix.merge_requests).length == 0 || Object.keys(data.matrix.issues).length == 0 ? null :
+                {!data.matrix.merge_requests || !data.matrix.issues || Object.keys(data.matrix.merge_requests).length == 0 || Object.keys(data.matrix.issues).length == 0 ? null :
                     <ContainerComponent
                         title={"Issues & Merge Requests Contribution Comparison Matrices"}>
                         {/*<div className="matrix bordered-box">*/}

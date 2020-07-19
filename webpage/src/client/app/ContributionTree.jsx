@@ -8,13 +8,15 @@ const formatPercentage = (value) => {
 const recurseFolderTree = (folderTree, storeObject) => {
     Object.keys(folderTree).forEach((key) => {
         if (folderTree[key].is_file === true) {
-            Object.keys(folderTree[key].contributors).forEach((email) => {
-                if (!storeObject.hasOwnProperty(email)) {
-                    storeObject[email] = 0;
-                }
+            if (folderTree[key].contributors) {
+                Object.keys(folderTree[key].contributors).forEach((email) => {
+                    if (!storeObject.hasOwnProperty(email)) {
+                        storeObject[email] = 0;
+                    }
 
-                storeObject[email] += folderTree[key].contributors[email];
-            });
+                    storeObject[email] += folderTree[key].contributors[email];
+                });
+            }
         } else {
             recurseFolderTree(folderTree[key], storeObject);
         }
@@ -24,19 +26,21 @@ const recurseFolderTree = (folderTree, storeObject) => {
 const determineContributors = (contributorData, contributors) => {
     let sum = 0;
 
-    Object.keys(contributorData).forEach((contributor) => {
-        sum += contributorData[contributor];
-    });
-
-    Object.keys(contributorData).forEach((contributor) => {
-        let contributionPercentage = contributorData[contributor] / sum;
-
-        contributors.push({
-            percentage: formatPercentage(contributionPercentage),
-            value: contributionPercentage,
-            name: Util.cutEmail(contributor)
+    if (contributorData && contributors) {
+        Object.keys(contributorData).forEach((contributor) => {
+            sum += contributorData[contributor];
         });
-    });
+
+        Object.keys(contributorData).forEach((contributor) => {
+            let contributionPercentage = contributorData[contributor] / sum;
+
+            contributors.push({
+                percentage: formatPercentage(contributionPercentage),
+                value: contributionPercentage,
+                name: Util.cutEmail(contributor)
+            });
+        });
+    }
 };
 
 const generateFolderTree = (folderTree, accessSubFolder) => {

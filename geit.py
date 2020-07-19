@@ -6,32 +6,49 @@ import re
 import click
 import shutil
 import time
+import os
 from src.gitlab.project import GitLabProject
 from src.physical.project import PhysicalProject
 from src.activity_matrix import ActivityMatrix
 
 
 @click.command()
-@click.option('--gitlab-url', help='GitLab API key', required=True)
-@click.option('--gitlab-api-key', help='GitLab API key', required=True)
-@click.option('--gitlab-project-id', help='GitLab Project ID', required=True)
+@click.option('--target-repo', help='The target repo', required=False)
+@click.option('--gitlab-url', help='GitLab API key', required=False)
+@click.option('--gitlab-api-key', help='GitLab API key', required=False)
+@click.option('--gitlab-project-id', help='GitLab Project ID', required=False)
 @click.option('--output', help='The output type (html/json)', default='html')
-def handle_cli(gitlab_url, gitlab_api_key, gitlab_project_id, output):
-    platform_project = GitLabProject(gitlab_url, gitlab_api_key, gitlab_project_id)
+@click.option('--all-files', help='Analyze all files indepedent of their size. By default all files that exceed 1 MB are excluded from analysis.', default=False)
+def handle_cli(target_repo, gitlab_url, gitlab_api_key, gitlab_project_id, output, all_files):
+    identifier = ""
 
     temp_folder_name = "temp_" + str(int(time.time()))
-
     shutil.rmtree(temp_folder_name, ignore_errors=True)
-    physical_project = PhysicalProject(temp_folder_name, platform_project.get_ssh_url())
+
+    platform_project = None
+    physical_project = None
+
+    if gitlab_url != None and gitlab_api_key != None and gitlab_project_id != None:
+        identifier = gitlab_project_id
+
+        platform_project = GitLabProject(gitlab_url, gitlab_api_key, gitlab_project_id)
+        physical_project = PhysicalProject(temp_folder_name, platform_project.get_ssh_url())
+    elif target_repo != None:
+        identifier = os.path.basename(target_repo)
+        #target_repo = target_repo[1:]
+        physical_project = PhysicalProject(target_repo)
+    else:
+        print('No git repo specified, or project was not (or incorrectly) specified. Check the README file.')
+        return
 
     committer_count = physical_project.get_committer_count()
 
     if committer_count > 24:
-        shutil.rmtree(temp_folder_name, ignore_errors=True)
+        if platform_project:
+            shutil.rmtree(temp_folder_name, ignore_errors=True)
+
         print("Repository has more than 24 (exactly " + str(committer_count) + ") committers. This is currently not supported.")
         return
-
-    matrix = ActivityMatrix(physical_project, platform_project)
 
     physical_data = dict()
 
@@ -40,12 +57,20 @@ def handle_cli(gitlab_url, gitlab_api_key, gitlab_project_id, output):
 
     print("Collecting and analyzing contribution data...")
     physical_data["contribution"] = {
-        "tree": physical_project.get_all_contributions(),
-        "types": physical_project.get_types_of_contributions()
+        "tree": physical_project.get_all_contributions(all_files=all_files),
+        "types": physical_project.get_types_of_contributions(all_files=all_files)
     }
 
-    print("Collecting and generating issues, merge requests, "
-          "commits, and contribution matrices...")
+    if platform_project:
+        matrix = ActivityMatrix(physical_project, platform_project)
+
+        print("Collecting and generating issue, merge requests, "
+              "commits, and contribution matrices...")
+    else:
+        matrix = ActivityMatrix(physical_project)
+
+        print("Collecting and generating commits and contribution matrices...")
+
     physical_data["matrix"] = matrix.get_aggregate_matrix_activity_data()
 
     json_physical_data = json.dumps(physical_data)
@@ -54,30 +79,31 @@ def handle_cli(gitlab_url, gitlab_api_key, gitlab_project_id, output):
 
     if output == 'html':
         print("Writing HTML output...")
-        filename = write_html_output(json_physical_data, gitlab_project_id)
+        filename = write_html_output(json_physical_data, identifier)
     elif output == 'json':
         print("Writing JSON output...")
-        filename = write_json_output(json_physical_data, gitlab_project_id)
+        filename = write_json_output(json_physical_data, identifier)
     else:
         print(json_physical_data)
 
     if filename:
         print("Done. See output at: " + filename)
 
-    shutil.rmtree(temp_folder_name, ignore_errors=True)
+    if platform_project:
+        shutil.rmtree(temp_folder_name, ignore_errors=True)
 
 
-def write_json_output(data, project_id):
-    filename = "data_" + project_id + ".json"
+def write_json_output(data, identifier):
+    filename = "data_" + identifier + ".json"
 
-    f = open(filename, "w+")
+    f = open(filename, "w+", encoding='utf-8')
     f.write(data)
     f.close()
 
     return filename
 
 
-def write_html_output(data, project_id):
+def write_html_output(data, identifier):
     f = open("webpage/src/client/public/index.html", "r")
     index_file = f.read()
 
@@ -86,9 +112,9 @@ def write_html_output(data, project_id):
                           index_file)
     f.close()
 
-    filename = "index_" + project_id + ".html"
+    filename = "index_" + identifier + ".html"
 
-    f = open(filename, "w+")
+    f = open(filename, "w+", encoding='utf-8')
     f.write(updated_file)
     f.close()
 

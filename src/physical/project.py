@@ -5,8 +5,9 @@ import os
 import re
 import pathlib
 import statistics
+import os
 
-from os import walk
+from os import walk, path
 
 from git import Repo
 from binaryornot.check import is_binary
@@ -19,6 +20,7 @@ class PhysicalProject:
 
     CONFIG_FILE_PREFIXES = ['.yml', '.whl', '.cfg', '.xml',
                             '.config', '.properties', '.rss', '.cmd', '.pub']
+
     CONFIG_FILENAMES = ['requirements-dev.txt', 'requirements_dev.txt',
                         'requirements.txt', 'setup.py', 'GruntFile.js',
                         'package.json', 'package-lock.json', '.gitignore', '.gitkeep',
@@ -219,13 +221,13 @@ class PhysicalProject:
         file_paths = []
         return_filenames = []
 
-        for (dir_path, dir_names, filenames) in walk('./' + self.folder):
+        for (dir_path, dir_names, filenames) in walk(self.folder):
             if ".git" not in dir_path:
                 for filename in filenames:
                     if filename == ".git":
                         continue
 
-                    path = dir_path.replace('./' + self.folder, '')
+                    path = dir_path.replace(self.folder, '')
 
                     if path == '':
                         file_paths.append(filename)
@@ -263,7 +265,7 @@ class PhysicalProject:
 
             yield email, line_code
 
-    def get_all_contributions(self):
+    def get_all_contributions(self, allow_print=False, all_files=False):
         """Get who-wrote-what for every file in a repository. Will be returned as a
         (non-binary) tree dictionary."""
         file_paths = self.get_all_file_paths()
@@ -278,29 +280,69 @@ class PhysicalProject:
                 sub_tree = sub_tree.setdefault(sub_path, {})
 
         for path in file_paths:
-            contributors = self.__yield_file_contributions('./' + path)
-
-            contributor_data = {
-                "contributors": {}
-            }
-
-            for (email, line) in contributors:
-                Util.add_count_to_identifier(contributor_data["contributors"], email,
-                                             add=1)
+            size_in_megabytes = os.path.getsize(self.folder + '/' + path) / 1000000
 
             sub_tree = tree
 
-            path = path.split('/')
+            if size_in_megabytes > 1 and not all_files:
+                if allow_print:
+                    print('Analyzing file ' + path + ' has been skipped as it larger than 1 MB. The size is ' + str(size_in_megabytes) + ' MB.')
 
-            # Add data to certain tree node based of path
-            for index in range(0, len(path)):
-                if index == len(path) - 1:
-                    sub_tree[path[index]] = {
-                        "is_file": True,
-                        "contributors": contributor_data['contributors']
-                    }
-                else:
-                    sub_tree = sub_tree[path[index]]
+                path = path.split('/')
+
+                # TODO: Fix the repeating code
+                for index in range(0, len(path)):
+                    if index == len(path) - 1:
+                        sub_tree[path[index]] = {
+                            "is_file": True,
+                            "contributors": None
+                        }
+                    else:
+                        sub_tree = sub_tree[path[index]]
+
+                continue
+
+            if allow_print:
+                print('Analyzing file ' + path + ', of size ' + str(size_in_megabytes) + ' MB.')
+
+            try:
+                contributors = self.__yield_file_contributions(path)
+
+                contributor_data = {
+                    "contributors": {}
+                }
+
+                for (email, line) in contributors:
+                    Util.add_count_to_identifier(contributor_data["contributors"], email,
+                                                 add=1)
+
+                path = path.split('/')
+
+                # Add data to certain tree node based of path
+                for index in range(0, len(path)):
+                    if index == len(path) - 1:
+                        sub_tree[path[index]] = {
+                            "is_file": True,
+                            "contributors": contributor_data['contributors']
+                        }
+                    else:
+                        sub_tree = sub_tree[path[index]]
+            except Exception as e:
+                if allow_print:
+                    print('Failed to find contributors to ' + path + ' in git repository. The file is ignored.')
+
+                path = path.split('/')
+
+                for index in range(0, len(path)):
+                    if index == len(path) - 1:
+                        sub_tree[path[index]] = {
+                            "is_file": True,
+                            "contributors": None
+                        }
+                    else:
+                        sub_tree = sub_tree[path[index]]
+
+                continue
 
         return tree
 
@@ -453,7 +495,7 @@ class PhysicalProject:
 
         return aggregate_data
 
-    def get_types_of_contributions(self, return_data=False):
+    def get_types_of_contributions(self, return_data=False, allow_print=False, all_files=False):
         """Recognize certain types of contributions."""
         file_paths, filenames = self.get_all_file_paths(return_file_names=True)
 
@@ -463,8 +505,24 @@ class PhysicalProject:
             # Binary files are excluded
             if is_binary(self.folder + '/' + file_path):
                 continue
+   
+            size_in_megabytes = os.path.getsize(self.folder + '/' + file_path) / 1000000
 
-            contributions = self.__yield_file_contributions('./' + file_path)
+            if size_in_megabytes > 1 and not all_files:
+                if allow_print:
+                    print('Analyzing file ' + file_path + ' has been skipped as it larger than 1 MB. The size is ' + str(size_in_megabytes) + ' MB.')
+                continue
+
+            if allow_print:
+                print('Analyzing file ' + file_path + ', of size ' + str(size_in_megabytes) + ' MB.')
+  
+            try:
+                contributions = self.__yield_file_contributions(file_path)
+                email_and_line_combined = list(contributions)
+            except Exception:
+                if allow_print:
+                    print('Failed to find contributors to ' + file_path + ' in git repository. The file is ignored.')
+                continue
 
             file_suffix = pathlib.Path(file_path).suffix
 
@@ -482,8 +540,6 @@ class PhysicalProject:
                     "documentation": {}
                 }
             }
-
-            email_and_line_combined = list(contributions)
 
             if (file_suffix in self.CONFIG_FILE_PREFIXES) \
                     or (filename in self.CONFIG_FILENAMES):

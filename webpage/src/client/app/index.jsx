@@ -15,7 +15,7 @@ class App extends React.Component {
                     <ContributionChart/>
                 </ContainerComponent>
 
-                <ActivityMatrix/>
+                {data.matrix ? <ActivityMatrix/> : null}
 
                 <ContainerComponent title={"Files & Folder Contribution"}>
                     <ContributionTree/>

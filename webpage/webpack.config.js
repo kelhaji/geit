@@ -31,24 +31,6 @@ const config = {
         }),
         new HtmlWebpackInlineSourcePlugin()
     ],
-    optimization: {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                parallel: true,
-                extractComments: false,
-                terserOptions: {
-                    comments: false,
-                    warnings: false,
-                    compress: true,
-                    mangle: true,
-                    module: false,
-                    output: null,
-                    toplevel: false
-                },
-            }),
-        ],
-    },
     mode: 'production'
 };
 

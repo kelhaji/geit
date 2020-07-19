@@ -9,7 +9,7 @@ class ActivityMatrix:
     """Responsible for creating an activity matrix
     from git data, issues, pull/merge requests."""
 
-    def __init__(self, physical_project, git_platform):
+    def __init__(self, physical_project, git_platform=None):
         self.physical_project = physical_project
         self.git_platform = git_platform
 
@@ -239,9 +239,15 @@ class ActivityMatrix:
 
     def get_aggregate_matrix_activity_data(self):
         """Get the all the aggregate activity data to be used in a matrix."""
-        return {
-            "issues": self.get_aggregate_issues_statistics(),
-            "merge_requests": self.get_aggregate_merge_request_statistics(),
-            "committs": self.get_aggregate_commit_statistics(),
-            "contribution_types": self.get_aggregate_contribution_types_statistics()
-        }
+        if self.git_platform:
+            return {
+                "issues": self.get_aggregate_issues_statistics(),
+                "merge_requests": self.get_aggregate_merge_request_statistics(),
+                "committs": self.get_aggregate_commit_statistics(),
+                "contribution_types": self.get_aggregate_contribution_types_statistics()
+            }
+        else: 
+            return {
+                "committs": self.get_aggregate_commit_statistics(),
+                "contribution_types": self.get_aggregate_contribution_types_statistics()
+            }
