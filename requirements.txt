@@ -3,3 +3,4 @@ binaryornot==0.4.4
 Click==7.0
 python-gitlab==1.8.0
 gitdb2==3.0.1
+win_unicode_console==0.5

@@ -7,6 +7,8 @@ import click
 import shutil
 import time
 import os
+import win_unicode_console
+
 from src.gitlab.project import GitLabProject
 from src.physical.project import PhysicalProject
 from src.activity_matrix import ActivityMatrix
@@ -73,7 +75,7 @@ def handle_cli(target_repo, gitlab_url, gitlab_api_key, gitlab_project_id, outpu
 
     physical_data["matrix"] = matrix.get_aggregate_matrix_activity_data()
 
-    json_physical_data = json.dumps(physical_data)
+    json_physical_data = json.dumps(physical_data, ensure_ascii=False)
 
     filename = None
 
@@ -96,7 +98,7 @@ def handle_cli(target_repo, gitlab_url, gitlab_api_key, gitlab_project_id, outpu
 def write_json_output(data, identifier):
     filename = "data_" + identifier + ".json"
 
-    f = open(filename, "w+", encoding='utf-8')
+    f = open(filename, "w+", encoding='utf_8_sig')
     f.write(data)
     f.close()
 
@@ -104,7 +106,7 @@ def write_json_output(data, identifier):
 
 
 def write_html_output(data, identifier):
-    f = open("webpage/src/client/public/index.html", "r")
+    f = open("webpage/src/client/public/index.html", "r", encoding='utf_8_sig')
     index_file = f.read()
 
     updated_file = re.sub(r'<script tag="data-entry-tag">.*<\/script>',
@@ -114,7 +116,7 @@ def write_html_output(data, identifier):
 
     filename = "index_" + identifier + ".html"
 
-    f = open(filename, "w+", encoding='utf-8')
+    f = open(filename, "w+", encoding='utf_8_sig')
     f.write(updated_file)
     f.close()
 
@@ -122,5 +124,8 @@ def write_html_output(data, identifier):
 
 
 if __name__ == '__main__':
+    # I hate windows
+    win_unicode_console.enable()
+
     handle_cli()
 
