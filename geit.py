@@ -22,6 +22,11 @@ from src.activity_matrix import ActivityMatrix
 @click.option('--output', help='The output type (html/json)', default='html')
 @click.option('--all-files', help='Analyze all files indepedent of their size. By default all files that exceed 1 MB are excluded from analysis.', default=False)
 def handle_cli(target_repo, gitlab_url, gitlab_api_key, gitlab_project_id, output, all_files):
+    if os.name == 'nt':
+        print('Currently Geit does not support Windows :(\n \
+            You can run Geit on Windows via the Windows Subsystem for Linux (WSL) module. Check the README file.')
+        return
+
     identifier = ""
 
     temp_folder_name = "temp_" + str(int(time.time()))

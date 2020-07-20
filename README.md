@@ -47,6 +47,8 @@ cd geit
 pip3 install -r requirements.txt
 ```
 
+**A note for Windows users:** Currently, the only way to run Geit on Windows is via the Windows Subsystem for Linux (WSL). Click [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10) to see how to install WSL. After installing WSL, you can follow the installation instructions here to set up Geit on the Linux subsystem.
+
 ## How to use
 
 You can generate a report by running the following command:
@@ -59,8 +61,6 @@ You can also specify the output type:
 python3 geit.py --target-repo /path/to/repo --output json
 ```
 The default output type is HTML.
-
-**Note:** If you make use of Windows do <u>_not_</u> run the script in Git Bash (see issue <a href="https://github.com/kelhaji/geit/issues/15" target="_blank">#15</a>).
 
 ### Usage with GitLab
 
