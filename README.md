@@ -44,25 +44,27 @@ Install the latest version using the following instructions:
 ```
 git clone https://github.com/kelhaji/geit
 cd geit
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## How to use
 
 You can generate a report by running the following command:
 ```
-python geit.py --target-repo /path/to/repo
+python3 geit.py --target-repo /path/to/repo
 ```
 
 You can also specify the output type:
 ```
-python geit.py --target-repo /path/to/repo --output json
+python3 geit.py --target-repo /path/to/repo --output json
 ```
 The default output type is HTML.
+
+**Note:** If you make use of Windows do <u>_not_</u> run the script in Git Bash (see issue <a href="https://github.com/kelhaji/geit/issues/15" target="_blank">#15</a>).
 
 ### Usage with GitLab
 
 You can generate a report by running the following command:
 ```
-python geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
+python3 geit.py --gitlab-url <YOUR_GITLAB_URL> --gitlab-api-key <YOUR_API_KEY> --gitlab-project-id <YOUR_PROJECT_ID>
 ```
