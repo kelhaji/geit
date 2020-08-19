@@ -46,6 +46,10 @@ class PhysicalProject:
         self.ssh_url = ssh_url
         self.repo = Repo.init()
 
+        if not os.path.exists(folder) and ssh_url is None:
+            raise FileNotFoundError('Specified target repo was not found.')
+            return
+
         if not os.path.isdir(folder):
             print("Cloning repo (" + self.ssh_url + ")...")
             self.repo.clone_from(self.ssh_url, self.folder)
@@ -524,7 +528,7 @@ class PhysicalProject:
                     print('Failed to find contributors to ' + file_path + ' in git repository. The file is ignored.')
                 continue
 
-            file_suffix = pathlib.Path(file_path).suffix
+            file_suffix = pathlib.Path(file_path).suffix.lower()
 
             # Dict to hold information on contribution
             file_contribution_metadata = {
