@@ -62,8 +62,6 @@ class PhysicalProject:
         the remote number of branches."""
         branches = self.repo.git.branch('-r')
 
-        print(self.repo.git.branch('-r').split('\n'))
-
         if branches == "":
             return 0
 
@@ -126,7 +124,7 @@ class PhysicalProject:
         for log_entry in self.repo.iter_commits("--no-merges", all=True):
             commit = self.repo.commit(log_entry)
 
-            commit_email = commit.committer.email
+            commit_email = commit.committer.email.lower()
             commit_datetime = commit.committed_datetime.timestamp()
             commit_stats_total = commit.stats.total
 
@@ -159,12 +157,12 @@ class PhysicalProject:
                                          add=1)
             if return_data:
                 all_commits.append({
-                    "author_email": commit.author.email,
+                    "author_email": commit.author.email.lower(),
                     "author_name": commit.author.name,
                     "authored_date": commit.authored_datetime.timestamp(),
                     "changes": commit.stats.files,
                     "committed_date": commit.committed_datetime.timestamp(),
-                    "committer_email": commit.committer.email,
+                    "committer_email": commit.committer.email.lower(),
                     "committer_name": commit.committer.name,
                     "encoding": commit.encoding,
                     "hash": commit.hexsha,
@@ -258,7 +256,7 @@ class PhysicalProject:
             if line == "":
                 continue
 
-            email = re.search('<(.*)>', raw_split[0]).group(1)
+            email = re.search('<(.*)>', raw_split[0]).group(1).lower()
 
             # This encoding and decoding exists because of some funky utf-8 error
             line_code = raw_split[1].encode('utf-8', 'surrogatepass').decode('utf-8',
