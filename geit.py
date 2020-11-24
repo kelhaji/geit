@@ -7,6 +7,7 @@ import click
 import shutil
 import time
 import os
+import codecs
 
 from src.gitlab.project import GitLabProject
 from src.physical.project import PhysicalProject
@@ -104,9 +105,10 @@ def write_html_output(data, identifier):
     f = open("webpage/src/client/public/index.html", "r", encoding='utf-8')
     index_file = f.read()
 
-    updated_file = re.sub(r'<script tag="data-entry-tag">.*<\/script>',
-                          '<script tag="data-entry-tag">var data = ' + str(re.escape(data)) + ';</script>',
-                          index_file)
+    data = data.decode('utf-8', 'replace')
+
+    updated_file = index_file.replace('<script tag="data-entry-tag"></script>',
+                          '<script tag="data-entry-tag">var data = ' + data + ';</script>')
     f.close()
 
     filename = "index_" + identifier + ".html"

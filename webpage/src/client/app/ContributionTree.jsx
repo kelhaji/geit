@@ -129,8 +129,6 @@ export default class ContributionTree extends React.Component {
 
         let targetPath = path[path.length - 2];
 
-        console.log(targetPath)
-
         if (targetPath === '.') {
             this.setState({
                 tree: data.contribution.tree,
@@ -140,8 +138,6 @@ export default class ContributionTree extends React.Component {
             path.shift();
 
             path.pop();
-
-            console.log(path);
 
             // Based off https://stackoverflow.com/questions/37611143/access-json-data-with-string-path
             const folderTree = path.reduce((o, k) => {

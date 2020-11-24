@@ -162,7 +162,7 @@ class PhysicalProject:
                     "authored_date": commit.authored_datetime.timestamp(),
                     "changes": commit.stats.files,
                     "committed_date": commit.committed_datetime.timestamp(),
-                    "committer_email": commit.committer.email.lower(),
+                    "committer_email": commit.committer.email,
                     "committer_name": commit.committer.name,
                     "encoding": commit.encoding,
                     "hash": commit.hexsha,
