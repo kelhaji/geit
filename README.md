@@ -70,6 +70,8 @@ python3 geit.py --target-repo /path/to/repo --output json
 ```
 The default output type is HTML.
 
+**Note for WSL users:** When running the above commands ensure that the target repo was cloned within WSL.  
+
 ### Usage with GitLab
 
 You can generate a report by running the following command:

@@ -43,6 +43,10 @@ def handle_cli(target_repo, gitlab_url, gitlab_api_key, gitlab_project_id, outpu
     elif target_repo != None:
         identifier = os.path.basename(target_repo)
         #target_repo = target_repo[1:]
+
+        if target_repo[-1] == '/':
+            target_repo = target_repo[:(len(target_repo) - 1)]
+
         physical_project = PhysicalProject(target_repo)
     else:
         print('No git repo specified, or project was not (or incorrectly) specified. Check the README file.')
@@ -105,7 +109,10 @@ def write_html_output(data, identifier):
     f = open("webpage/src/client/public/index.html", "r", encoding='utf-8')
     index_file = f.read()
 
-    data = data.decode('utf-8', 'replace')
+    try:
+        data = data.decode('utf-8', 'replace')
+    except:
+        pass
 
     updated_file = index_file.replace('<script tag="data-entry-tag"></script>',
                           '<script tag="data-entry-tag">var data = ' + data + ';</script>')
