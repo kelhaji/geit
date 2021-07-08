@@ -19,7 +19,7 @@ class PhysicalProject:
     """Responsible for extracting and summarizing GIT repository data."""
 
     CONFIG_FILE_PREFIXES = ['.yml', '.whl', '.cfg', '.xml',
-                            '.config', '.properties', '.rss', '.cmd', '.pub']
+                            '.config', '.properties', '.rss', '.cmd', '.pub', '.toml']
 
     CONFIG_FILENAMES = ['requirements-dev.txt', 'requirements_dev.txt',
                         'requirements.txt', 'setup.py', 'GruntFile.js',
@@ -29,7 +29,7 @@ class PhysicalProject:
 
     CODE_FILE_PREFIXES = ['.py', '.c', '.cpp', '.js', '.java', '.cs', '.ts',
                           '.jsx', '.tsx', '.scala', '.sc', '.php', '.go', '.swift',
-                          '.h']
+                          '.h', '.rs']
 
     UI_FILE_PREFIXES = ['.html', '.css', '.htmlx', '.htm', '.aspx', '.fxml',
                         '.jsp', '.ui']
@@ -46,6 +46,10 @@ class PhysicalProject:
         self.ssh_url = ssh_url
         self.repo = Repo.init()
 
+        if not os.path.exists(folder) and ssh_url is None:
+            raise FileNotFoundError('Specified target repo was not found.')
+            return
+
         if not os.path.isdir(folder):
             print("Cloning repo (" + self.ssh_url + ")...")
             self.repo.clone_from(self.ssh_url, self.folder)
@@ -57,8 +61,6 @@ class PhysicalProject:
         """Get number of branches. Note that this returns
         the remote number of branches."""
         branches = self.repo.git.branch('-r')
-
-        print(self.repo.git.branch('-r').split('\n'))
 
         if branches == "":
             return 0
@@ -122,7 +124,7 @@ class PhysicalProject:
         for log_entry in self.repo.iter_commits("--no-merges", all=True):
             commit = self.repo.commit(log_entry)
 
-            commit_email = commit.committer.email
+            commit_email = commit.committer.email.lower()
             commit_datetime = commit.committed_datetime.timestamp()
             commit_stats_total = commit.stats.total
 
@@ -155,7 +157,7 @@ class PhysicalProject:
                                          add=1)
             if return_data:
                 all_commits.append({
-                    "author_email": commit.author.email,
+                    "author_email": commit.author.email.lower(),
                     "author_name": commit.author.name,
                     "authored_date": commit.authored_datetime.timestamp(),
                     "changes": commit.stats.files,
@@ -254,7 +256,7 @@ class PhysicalProject:
             if line == "":
                 continue
 
-            email = re.search('<(.*)>', raw_split[0]).group(1)
+            email = re.search('<(.*)>', raw_split[0]).group(1).lower()
 
             # This encoding and decoding exists because of some funky utf-8 error
             line_code = raw_split[1].encode('utf-8', 'surrogatepass').decode('utf-8',
@@ -280,32 +282,32 @@ class PhysicalProject:
                 sub_tree = sub_tree.setdefault(sub_path, {})
 
         for path in file_paths:
-            size_in_megabytes = os.path.getsize(self.folder + '/' + path) / 1000000
-
-            sub_tree = tree
-
-            if size_in_megabytes > 1 and not all_files:
-                if allow_print:
-                    print('Analyzing file ' + path + ' has been skipped as it larger than 1 MB. The size is ' + str(size_in_megabytes) + ' MB.')
-
-                path = path.split('/')
-
-                # TODO: Fix the repeating code
-                for index in range(0, len(path)):
-                    if index == len(path) - 1:
-                        sub_tree[path[index]] = {
-                            "is_file": True,
-                            "contributors": None
-                        }
-                    else:
-                        sub_tree = sub_tree[path[index]]
-
-                continue
-
-            if allow_print:
-                print('Analyzing file ' + path + ', of size ' + str(size_in_megabytes) + ' MB.')
-
             try:
+                size_in_megabytes = os.path.getsize(self.folder + '/' + path) / 1000000
+
+                sub_tree = tree
+
+                if size_in_megabytes > 1 and not all_files:
+                    if allow_print:
+                        print('Analyzing file ' + path + ' has been skipped as it larger than 1 MB. The size is ' + str(size_in_megabytes) + ' MB.')
+
+                    path = path.split('/')
+
+                    # TODO: Fix the repeating code
+                    for index in range(0, len(path)):
+                        if index == len(path) - 1:
+                            sub_tree[path[index]] = {
+                                "is_file": True,
+                                "contributors": None
+                            }
+                        else:
+                            sub_tree = sub_tree[path[index]]
+
+                    continue
+
+                if allow_print:
+                    print('Analyzing file ' + path + ', of size ' + str(size_in_megabytes) + ' MB.')
+
                 contributors = self.__yield_file_contributions(path)
 
                 contributor_data = {
@@ -328,8 +330,7 @@ class PhysicalProject:
                     else:
                         sub_tree = sub_tree[path[index]]
             except Exception as e:
-                if allow_print:
-                    print('Failed to find contributors to ' + path + ' in git repository. The file is ignored.')
+                print('Failed to find contributors to ' + path + ' in git repository. The file is ignored.')
 
                 path = path.split('/')
 
@@ -502,29 +503,29 @@ class PhysicalProject:
         files_with_types_of_contribution = []
 
         for (file_path, filename) in list(zip(file_paths, filenames)):
-            # Binary files are excluded
-            if is_binary(self.folder + '/' + file_path):
-                continue
-   
-            size_in_megabytes = os.path.getsize(self.folder + '/' + file_path) / 1000000
-
-            if size_in_megabytes > 1 and not all_files:
-                if allow_print:
-                    print('Analyzing file ' + file_path + ' has been skipped as it larger than 1 MB. The size is ' + str(size_in_megabytes) + ' MB.')
-                continue
-
-            if allow_print:
-                print('Analyzing file ' + file_path + ', of size ' + str(size_in_megabytes) + ' MB.')
-  
             try:
+                # Binary files are excluded
+                if is_binary(self.folder + '/' + file_path):
+                    continue
+       
+                size_in_megabytes = os.path.getsize(self.folder + '/' + file_path) / 1000000
+
+                if size_in_megabytes > 1 and not all_files:
+                    if allow_print:
+                        print('Analyzing file ' + file_path + ' has been skipped as it larger than 1 MB. The size is ' + str(size_in_megabytes) + ' MB.')
+                    continue
+
+                if allow_print:
+                    print('Analyzing file ' + file_path + ', of size ' + str(size_in_megabytes) + ' MB.')
+  
+
                 contributions = self.__yield_file_contributions(file_path)
                 email_and_line_combined = list(contributions)
             except Exception:
-                if allow_print:
-                    print('Failed to find contributors to ' + file_path + ' in git repository. The file is ignored.')
+                print('Failed to find contributors to ' + file_path + ' in git repository. The file is ignored.')
                 continue
 
-            file_suffix = pathlib.Path(file_path).suffix
+            file_suffix = pathlib.Path(file_path).suffix.lower()
 
             # Dict to hold information on contribution
             file_contribution_metadata = {

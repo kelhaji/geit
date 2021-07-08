@@ -16,7 +16,7 @@ class GitLabProject:
         self.gitlab = gitlab.Gitlab(url, private_token=token)
 
         print("Getting GitLab project metadata...")
-        self.gitlab_project = self.gitlab.projects.get(self.project_id)
+        self.gitlab_project = self.gitlab.projects.get(self.project_id) 
 
     def get_date_format(self):
         """Get date format that is used in Gitlab's API."""

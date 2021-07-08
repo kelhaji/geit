@@ -127,7 +127,10 @@ class ActivityMatrix:
 
                 life_time_merge_requests.append(time_spent)
 
-        return mean(life_time_merge_requests)
+        try:
+            return mean(life_time_merge_requests)
+        except:
+            return 0
 
     def __extract_user_merge_request_statistics(self,
                                                 merge_requests, all_merge_requests,

@@ -8,7 +8,7 @@ from src.physical.project import PhysicalProject
 class TestProject:
     """We use a test repo (that is added as a submodule to the Geit repo) to verify
     the behaviour of PhysicalProject functions."""
-    project = PhysicalProject("../resources/geit-test-repo")
+    project = PhysicalProject("tests/resources/geit-test-repo")
 
     # Constants derived from test-repo
     AMOUNT_OF_INSERTIONS_IN_TEST_REPO = 21

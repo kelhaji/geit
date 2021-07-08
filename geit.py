@@ -7,7 +7,7 @@ import click
 import shutil
 import time
 import os
-import win_unicode_console
+import codecs
 
 from src.gitlab.project import GitLabProject
 from src.physical.project import PhysicalProject
@@ -43,18 +43,13 @@ def handle_cli(target_repo, gitlab_url, gitlab_api_key, gitlab_project_id, outpu
     elif target_repo != None:
         identifier = os.path.basename(target_repo)
         #target_repo = target_repo[1:]
+
+        if target_repo[-1] == '/':
+            target_repo = target_repo[:(len(target_repo) - 1)]
+
         physical_project = PhysicalProject(target_repo)
     else:
         print('No git repo specified, or project was not (or incorrectly) specified. Check the README file.')
-        return
-
-    committer_count = physical_project.get_committer_count()
-
-    if committer_count > 24:
-        if platform_project:
-            shutil.rmtree(temp_folder_name, ignore_errors=True)
-
-        print("Repository has more than 24 (exactly " + str(committer_count) + ") committers. This is currently not supported.")
         return
 
     physical_data = dict()
@@ -103,7 +98,7 @@ def handle_cli(target_repo, gitlab_url, gitlab_api_key, gitlab_project_id, outpu
 def write_json_output(data, identifier):
     filename = "data_" + identifier + ".json"
 
-    f = open(filename, "w+", encoding='utf_8_sig')
+    f = open(filename, "w+", encoding='utf-8')
     f.write(data)
     f.close()
 
@@ -111,17 +106,21 @@ def write_json_output(data, identifier):
 
 
 def write_html_output(data, identifier):
-    f = open("webpage/src/client/public/index.html", "r", encoding='utf_8_sig')
+    f = open("webpage/src/client/public/index.html", "r", encoding='utf-8')
     index_file = f.read()
 
-    updated_file = re.sub(r'<script tag="data-entry-tag">.*<\/script>',
-                          '<script tag="data-entry-tag">var data = ' + str(data) + ';</script>',
-                          index_file)
+    try:
+        data = data.decode('utf-8', 'replace')
+    except:
+        pass
+
+    updated_file = index_file.replace('<script tag="data-entry-tag"></script>',
+                          '<script tag="data-entry-tag">var data = ' + data + ';</script>')
     f.close()
 
     filename = "index_" + identifier + ".html"
 
-    f = open(filename, "w+", encoding='utf_8_sig')
+    f = open(filename, "w+", encoding='utf-8')
     f.write(updated_file)
     f.close()
 
@@ -130,7 +129,7 @@ def write_html_output(data, identifier):
 
 if __name__ == '__main__':
     # I hate windows
-    win_unicode_console.enable()
+    # win_unicode_console.enable()
 
     handle_cli()
 
