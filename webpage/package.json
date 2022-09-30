@@ -15,7 +15,7 @@
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "recharts": "^1.8.5"
+    "recharts": "^2.1.14"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
