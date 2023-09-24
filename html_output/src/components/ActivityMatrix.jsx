@@ -1,11 +1,14 @@
 import React from 'react';
 
-import ContributionMatrix from './ContributionMatrix.jsx';
-import CommitMatrix from './CommitMatrix.jsx';
+import ContributionMatrix from './Contribution/ContributionMatrix.jsx';
+import CommitMatrix from './Commit/CommitMatrix.jsx';
 import ContainerComponent from './ContainerComponent.jsx';
-import IssueContributionMatrix from './IssueContributionMatrix.jsx';
-import MergeRequestContributionMatrix from './MergeRequestContributionMatrix.jsx';
+import IssueContributionMatrix from './Contribution/IssueContributionMatrix.jsx';
+import MergeRequestContributionMatrix from './Contribution/MergeRequestContributionMatrix.jsx';
 
+/**
+ * A component that displays the activity tables.
+ */
 export default class ActivityMatrix extends React.Component {
 
     constructor(props) {
@@ -18,9 +21,9 @@ export default class ActivityMatrix extends React.Component {
             <div>
                 <ContainerComponent
                     title={"Code & Commit Contribution Comparison Matrices"}>
-                    <ContributionMatrix/>
+                    <ContributionMatrix data={this.props.data}/>
                     <hr></hr>
-                    <CommitMatrix/>
+                    <CommitMatrix data={this.props.data}/>
                     <hr style={{marginBottom: '-0.25rem'}}></hr>
                     <small className="d-block text-left mt-3" style={{float: 'left'}}>
                         &nbsp;<span className="info-block"
@@ -28,7 +31,7 @@ export default class ActivityMatrix extends React.Component {
                         average (&lt;50%)&nbsp;
                         &nbsp;<span className="info-block"
                                     style={{backgroundColor: '#f5da85'}}>&nbsp;</span> Above
-                        average (>200%)&nbsp;
+                        average ({'>'}200%)&nbsp;
                         &nbsp;<span className="info-block"
                                     style={{backgroundColor: '#69b1ff'}}>&nbsp;</span> Needs
                         attention&nbsp;
@@ -38,15 +41,15 @@ export default class ActivityMatrix extends React.Component {
                     all branches. <br/> Reverting commits may significantly skew contribution data.</span>
                     </small>
                 </ContainerComponent>
-                {!data.matrix.merge_requests || !data.matrix.issues || Object.keys(data.matrix.merge_requests).length == 0 || Object.keys(data.matrix.issues).length == 0 ? null :
+                {!this.props.data.matrix.merge_requests || !this.props.data.matrix.issues || Object.keys(this.props.data.matrix.merge_requests).length == 0 || Object.keys(this.props.data.matrix.issues).length == 0 ? null :
                     <ContainerComponent
                         title={"Issues & Merge Requests Contribution Comparison Matrices"}>
                         {/*<div className="matrix bordered-box">*/}
                         {/*    {generateMatrix(data.matrix.issues)}*/}
                         {/*</div>*/}
-                        <IssueContributionMatrix/>
+                        <IssueContributionMatrix data={this.props.data}/>
                         <hr></hr>
-                        <MergeRequestContributionMatrix/>
+                        <MergeRequestContributionMatrix data={this.props.data}/>
                         {/*<div className="matrix bordered-box">*/}
                         {/*    {generateMatrix(data.matrix.merge_requests)}*/}
                         {/*</div>*/}
@@ -57,7 +60,7 @@ export default class ActivityMatrix extends React.Component {
                             average (&lt;50%)&nbsp;
                             &nbsp;<span className="info-block"
                                         style={{backgroundColor: '#f5da85'}}>&nbsp;</span> Above
-                            average (>200%)&nbsp;
+                            average ({'>'}200%)&nbsp;
                             &nbsp;<span className="info-block"
                                         style={{backgroundColor: '#69b1ff'}}>&nbsp;</span> Needs
                             attention&nbsp;

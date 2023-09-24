@@ -1,47 +1,66 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import Util from './Util.js';
+import PropTypes from "prop-types";
+import Util from '../../logic/Util.js';
 
+/**
+ * Renders a contribution chart from the Geit data.
+ */
+export default class ContributionChart extends Component {
 
-const chartData = Object.keys(data.contribution.types.contributors).map((key) => {
-    let dataPoint = {
-        name: Util.cutEmail(key)
+    static propTypes = {
+        data: PropTypes.object.isRequired
     };
 
-    Object.assign(dataPoint, data.contribution.types.contributors[key]);
-
-    return dataPoint;
-});
-
-chartData.sort((A, B) => {
-    let sumA = 0;
-    let sumB = 0;
-
-    Object.keys(A).forEach((key) => {
-        if (key !== 'name') {
-            sumA += A[key];
-        }
-    });
-
-    Object.keys(B).forEach((key) => {
-        if (key !== 'name') {
-            sumB += B[key];
-        }
-    });
-
-    return sumB - sumA;
-});
-
-export default class ContributionChart extends PureComponent {
+    /**
+     * Converts the data to a format that can be used by the chart library.
+     * 
+     * @param {object} data 
+     * @returns raw chart data
+     */
+    getChartData(data) {
+        // Convert data to chart data format
+        let chartData = Object.keys(data.contribution.types.contributors).map((key) => {
+            let dataPoint = {
+                name: Util.cutEmail(key)
+            };
+        
+            Object.assign(dataPoint, data.contribution.types.contributors[key]);
+        
+            return dataPoint;
+        });
+        
+        // Sort data by sum of contributions
+        chartData.sort((A, B) => {
+            let sumA = 0;
+            let sumB = 0;
+        
+            Object.keys(A).forEach((key) => {
+                if (key !== 'name') {
+                    sumA += A[key];
+                }
+            });
+        
+            Object.keys(B).forEach((key) => {
+                if (key !== 'name') {
+                    sumB += B[key];
+                }
+            });
+        
+            return sumB - sumA;
+        });
+    
+        return chartData;
+    }
 
     render() {
         return (
             <div style={{width: '100%', height: 400}}>
                 <ResponsiveContainer>
                     <BarChart
-                        data={chartData}
+                        data={this.getChartData(this.props.data)}
                         margin={{
                             top: 30, right: 50, left: 0, bottom: 20,
                         }}

@@ -1,10 +1,23 @@
 import React from 'react';
-import Util from './Util.js';
+import Util from '../../logic/Util.js';
 
+/**
+ * Formats a number and returns a string.
+ * 
+ * @param {number} value 
+ * @returns string
+ */
 const formatPercentage = (value) => {
     return `${(value * 100).toFixed(1)}%`
 };
 
+/**
+ * Recurses through the folder tree and adds the contributors to the store object, so we 
+ * can determine the percentage on a folder level.
+ * 
+ * @param {object} folderTree 
+ * @param {object} storeObject 
+ */
 const recurseFolderTree = (folderTree, storeObject) => {
     Object.keys(folderTree).forEach((key) => {
         if (folderTree[key].is_file === true) {
@@ -23,6 +36,12 @@ const recurseFolderTree = (folderTree, storeObject) => {
     })
 };
 
+/**
+ * Fills the contributors array with the contributors of a file/folder including percentages.
+ * 
+ * @param {object} contributorData 
+ * @param {array} contributors 
+ */
 const determineContributors = (contributorData, contributors) => {
     let sum = 0;
 
@@ -43,11 +62,19 @@ const determineContributors = (contributorData, contributors) => {
     }
 };
 
+/**
+ * Generates the folder tree.
+ * 
+ * @param {string} folderTree 
+ * @param {func} accessSubFolder 
+ * @returns rendered folder tree 
+ */
 const generateFolderTree = (folderTree, accessSubFolder) => {
     let topLevelEntities = Object.keys(folderTree);
 
     topLevelEntities.sort();
 
+    // Sort the folders to the top, and the files to the bottom.
     topLevelEntities.sort((a, b) => {
         if (folderTree[a].is_file === true &&
             folderTree[b].is_file === undefined) {
@@ -106,17 +133,25 @@ const generateFolderTree = (folderTree, accessSubFolder) => {
     return folderContent;
 };
 
+/**
+ * Renders a clickable folder structure showing the contribution of each user per file/folder.
+ */
 export default class ContributionTree extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            tree: data.contribution.tree,
+            tree: this.props.data.contribution.tree,
             path: '.'
         };
     }
 
+    /**
+     * Access a sub folder.
+     * 
+     * @param {string} subFolder 
+     */
     accessSubFolder(subFolder) {
         this.setState({
             tree: this.state.tree[subFolder],
@@ -124,6 +159,9 @@ export default class ContributionTree extends React.Component {
         });
     }
 
+    /**
+     * Backtrack to the parent folder.
+     */
     backtrackSubFolder() {
         let path = this.state.path.split('/');
 
@@ -131,7 +169,7 @@ export default class ContributionTree extends React.Component {
 
         if (targetPath === '.') {
             this.setState({
-                tree: data.contribution.tree,
+                tree: this.props.data.contribution.tree,
                 path: '.'
             });
         } else {
@@ -140,9 +178,10 @@ export default class ContributionTree extends React.Component {
             path.pop();
 
             // Based off https://stackoverflow.com/questions/37611143/access-json-data-with-string-path
+            // I don't know how this works exactly, but it does.
             const folderTree = path.reduce((o, k) => {
                 return o && o[k];
-            }, data.contribution.tree);
+            }, this.props.data.contribution.tree);
 
             this.setState({
                 tree: folderTree,
@@ -150,7 +189,6 @@ export default class ContributionTree extends React.Component {
             });
         }
     }
-
 
     render() {
         return (

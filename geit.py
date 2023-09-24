@@ -106,7 +106,7 @@ def write_json_output(data, identifier):
 
 
 def write_html_output(data, identifier):
-    f = open("webpage/src/client/public/index.html", "r", encoding='utf-8')
+    f = open("html_output/public/index.min.html", "r", encoding='utf-8')
     index_file = f.read()
 
     try:
@@ -115,7 +115,7 @@ def write_html_output(data, identifier):
         pass
 
     updated_file = index_file.replace('<script tag="data-entry-tag"></script>',
-                          '<script tag="data-entry-tag">var data = ' + data + ';</script>')
+                          '<script tag="data-entry-tag">window.geitData = ' + data + ';</script>')
     f.close()
 
     filename = "index_" + identifier + ".html"

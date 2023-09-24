@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * A container component that wraps around other components.
+ */
 export default class ContainerComponent extends React.Component {
     render() {
         return (
