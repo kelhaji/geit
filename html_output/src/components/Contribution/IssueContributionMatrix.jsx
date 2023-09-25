@@ -1,5 +1,7 @@
 import React from 'react';
-import Util from './Util.js';
+import Util from '../../logic/Util.js';
+
+// TODO: Refactor this to be more generic and add comments
 
 const generateContributionMatrix = (targetData) => {
     const dataKeys = Object.keys(targetData);
@@ -17,7 +19,8 @@ const generateContributionMatrix = (targetData) => {
                     borderRight: totalKeys - 1 === index ? 'none' : '',
                     width: '100px'
                 }}>
-                {Util.cutEmail(key)}</th>
+                {Util.cutEmail(key)}
+            </th>
         );
     });
 
@@ -30,46 +33,49 @@ const generateContributionMatrix = (targetData) => {
             return targetData[user][key];
         });
 
-        const total = Util.sum(allDataPoints);
-
-        const mean = total / allDataPoints.length;
+        const mean = Util.sum(allDataPoints) / allDataPoints.length;
         const poorlyPerformingThreshold = mean - 0.5 * mean;
         const overPerformingThreshold = 2 * mean;
 
-        const performanceColor = (value, user) => {
-            if (total == 0 && (key === 'code' || key === 'test' || key == 'comments')) {
-                return '#69b1ff';
-            }
-
-            if (total == 0 && (key === 'user_interface' || key === 'documentation' || key == 'configuration')) {
+        const performanceColor = (value) => {
+            if (key === 'total_issues_self_assigned_only') {
                 return '';
             }
 
-            if ((key === 'code' || key === 'test' || key === 'comments') && value === 0) {
-                return '#69b1ff';
-            }
-
-            // Based off https://everything2.com/title/comment-to-code+ratio
-            if (key === 'comments') {
-                const commentRatio = value / (targetData[user]['code'] + targetData[user]['test']);
-
-                if (commentRatio < 0.09) {
+            if (key === 'total_issues_without_milestones' ||
+                key === 'total_issues_without_labels' ||
+                key === 'total_issues_without_description' ||
+                key === 'total_issues_without_assignee') {
+                if (value > 0) {
                     return '#69b1ff';
                 } else {
                     return '';
                 }
             }
 
-            if (value >= overPerformingThreshold) {
+            if (key === 'median_committed_lines' || key === 'average_committed_lines') {
+                if (value >= 500) {
+                    return '#69b1ff';
+                } else {
+                    return '';
+                }
+            }
+
+            if (value > overPerformingThreshold) {
                 return '#f5da85';
             }
 
-            if (value <= poorlyPerformingThreshold) {
+            if (value < poorlyPerformingThreshold) {
                 return '#ea7266';
             }
 
             return '';
         };
+
+        const keysWithFixedValues = ['average_time_in_hours_estimated_on_issues',
+            'average_time_in_hours_all_assignees_spent_on_issues',
+            'total_time_spent_in_hours_individually_on_all_issues',
+            'average_assignees_per_issue'];
 
         return (
             <tr key={index}>
@@ -79,10 +85,13 @@ const generateContributionMatrix = (targetData) => {
                         <td key={subIndex}
                             style={{
                                 borderRight: totalKeys - 1 === subIndex ? 'none' : '',
-                                backgroundColor: performanceColor(targetData[user][key], user)
+                                backgroundColor: performanceColor(targetData[user][key])
                             }}
-                        >{targetData[user][key]}</td>
-                    )
+                        >
+                            {keysWithFixedValues.includes(key) ?
+                                targetData[user][key].toFixed(2) : targetData[user][key]}
+                        </td>
+                    );
                 })}
             </tr>
         );
@@ -91,7 +100,7 @@ const generateContributionMatrix = (targetData) => {
     return (
         <table>
             <colgroup>
-                <col style={{width: '20%'}}/>
+                <col style={{width: '35%'}}/>
             </colgroup>
             <thead>
                 <tr>
@@ -106,7 +115,7 @@ const generateContributionMatrix = (targetData) => {
     );
 };
 
-export default class ContributionMatrix extends React.Component {
+export default class IssueContributionMatrix extends React.Component {
 
     constructor(props) {
         super(props);
@@ -116,8 +125,8 @@ export default class ContributionMatrix extends React.Component {
 
     render() {
         return (
-            <div className="matrix">
-                {generateContributionMatrix(data.matrix.contribution_types)}
+            <div className="matrix" style={{marginTop: '10px'}}>
+                {generateContributionMatrix(this.props.data.matrix.issues)}
             </div>
         );
     }

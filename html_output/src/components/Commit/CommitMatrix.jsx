@@ -1,9 +1,11 @@
-import React from 'react';
-import Util from './Util.js';
+import React, { Component } from 'react';
+import Util from '../../logic/Util.js';
+import PropTypes from "prop-types";
 
 const generateContributionMatrix = (targetData) => {
     const dataKeys = Object.keys(targetData);
 
+    // Based off https://stackoverflow.com/questions/21700773/javascripts-sort-method-handling-of-capital-letters
     dataKeys.sort(function (a, b) {
         return a.localeCompare(b);
     });
@@ -36,39 +38,33 @@ const generateContributionMatrix = (targetData) => {
         const overPerformingThreshold = 2 * mean;
 
         const performanceColor = (value) => {
-            if (key === 'average_lifetime_in_hours_of_merge_requests') {
-                if (value < 1) {
+            if (key === 'large_commit_ratio') {
+                if (value > 0.10) {
                     return '#69b1ff';
                 } else {
                     return '';
                 }
             }
 
-            if (key === 'total_merge_requests_without_labels' ||
-                key === 'total_merge_requests_without_milestones' ||
-                key === 'total_merge_requests_without_description' ||
-                key === 'total_merge_requests_without_assignee' ||
-                key === 'total_merge_requests_merged_by_self') {
-                if (value > 0) {
+            if (key === 'median_of_lines_per_commit' ||
+                key === 'average_of_lines_per_commit') {
+                if (value >= 500) {
                     return '#69b1ff';
                 } else {
                     return '';
                 }
             }
 
-            if (value > overPerformingThreshold) {
+            if (value >= overPerformingThreshold) {
                 return '#f5da85';
             }
 
-            if (value < poorlyPerformingThreshold) {
+            if (value <= poorlyPerformingThreshold) {
                 return '#ea7266';
             }
 
             return '';
         };
-
-        const keysWithFixedValues = ['average_assignees_per_merge_requests',
-            'average_lifetime_in_hours_of_merge_requests'];
 
         return (
             <tr key={index}>
@@ -80,9 +76,8 @@ const generateContributionMatrix = (targetData) => {
                                 borderRight: totalKeys - 1 === subIndex ? 'none' : '',
                                 backgroundColor: performanceColor(targetData[user][key])
                             }}
-                        >{keysWithFixedValues.includes(key) ?
-                            targetData[user][key].toFixed(2) : targetData[user][key]}
-                        </td>
+                        >{key === 'total_commits' ? targetData[user][key] :
+                            targetData[user][key].toFixed(2)}</td>
                     )
                 })}
             </tr>
@@ -92,33 +87,31 @@ const generateContributionMatrix = (targetData) => {
     return (
         <table>
             <colgroup>
-                <col style={{width: '35%'}}/>
+                <col style={{width: '20%'}}/>
             </colgroup>
             <thead>
-                <tr>
-                    <th style={{borderLeft: 'none'}}>&nbsp;</th>
-                    {head}
-                </tr>
+            <tr>
+                <th style={{borderLeft: 'none'}}>&nbsp;</th>
+                {head}
+            </tr>
             </thead>
             <tbody>
-             {bodyData}
+            {bodyData}
             </tbody>
         </table>
     );
 };
 
-export default class MergeRequestContributionMatrix extends React.Component {
+export default class CommitMatrix extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-    }
+    static propTypes = {
+        data: PropTypes.object.isRequired
+    };
 
     render() {
         return (
             <div className="matrix" style={{marginTop: '10px'}}>
-                {generateContributionMatrix(data.matrix.merge_requests)}
+                {generateContributionMatrix(this.props.data.matrix.committs)}
             </div>
         );
     }

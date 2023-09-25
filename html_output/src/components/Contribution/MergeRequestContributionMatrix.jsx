@@ -1,5 +1,7 @@
 import React from 'react';
-import Util from './Util.js';
+import Util from '../../logic/Util.js';
+
+// TODO: Refactor this to be more generic and add comments
 
 const generateContributionMatrix = (targetData) => {
     const dataKeys = Object.keys(targetData);
@@ -36,23 +38,20 @@ const generateContributionMatrix = (targetData) => {
         const overPerformingThreshold = 2 * mean;
 
         const performanceColor = (value) => {
-            if (key === 'total_issues_self_assigned_only') {
-                return '';
-            }
-
-            if (key === 'total_issues_without_milestones' ||
-                key === 'total_issues_without_labels' ||
-                key === 'total_issues_without_description' ||
-                key === 'total_issues_without_assignee') {
-                if (value > 0) {
+            if (key === 'average_lifetime_in_hours_of_merge_requests') {
+                if (value < 1) {
                     return '#69b1ff';
                 } else {
                     return '';
                 }
             }
 
-            if (key === 'median_committed_lines' || key === 'average_committed_lines') {
-                if (value >= 500) {
+            if (key === 'total_merge_requests_without_labels' ||
+                key === 'total_merge_requests_without_milestones' ||
+                key === 'total_merge_requests_without_description' ||
+                key === 'total_merge_requests_without_assignee' ||
+                key === 'total_merge_requests_merged_by_self') {
+                if (value > 0) {
                     return '#69b1ff';
                 } else {
                     return '';
@@ -70,10 +69,8 @@ const generateContributionMatrix = (targetData) => {
             return '';
         };
 
-        const keysWithFixedValues = ['average_time_in_hours_estimated_on_issues',
-            'average_time_in_hours_all_assignees_spent_on_issues',
-            'total_time_spent_in_hours_individually_on_all_issues',
-            'average_assignees_per_issue'];
+        const keysWithFixedValues = ['average_assignees_per_merge_requests',
+            'average_lifetime_in_hours_of_merge_requests'];
 
         return (
             <tr key={index}>
@@ -85,11 +82,10 @@ const generateContributionMatrix = (targetData) => {
                                 borderRight: totalKeys - 1 === subIndex ? 'none' : '',
                                 backgroundColor: performanceColor(targetData[user][key])
                             }}
-                        >
-                            {keysWithFixedValues.includes(key) ?
-                                targetData[user][key].toFixed(2) : targetData[user][key]}
+                        >{keysWithFixedValues.includes(key) ?
+                            targetData[user][key].toFixed(2) : targetData[user][key]}
                         </td>
-                    );
+                    )
                 })}
             </tr>
         );
@@ -107,13 +103,13 @@ const generateContributionMatrix = (targetData) => {
                 </tr>
             </thead>
             <tbody>
-                {bodyData}
+             {bodyData}
             </tbody>
         </table>
     );
 };
 
-export default class IssueContributionMatrix extends React.Component {
+export default class MergeRequestContributionMatrix extends React.Component {
 
     constructor(props) {
         super(props);
@@ -124,7 +120,7 @@ export default class IssueContributionMatrix extends React.Component {
     render() {
         return (
             <div className="matrix" style={{marginTop: '10px'}}>
-                {generateContributionMatrix(data.matrix.issues)}
+                {generateContributionMatrix(this.props.data.matrix.merge_requests)}
             </div>
         );
     }

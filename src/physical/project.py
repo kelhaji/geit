@@ -121,6 +121,7 @@ class PhysicalProject:
 
         commit_timeline_per_contributor = {}
 
+        # Iterate over all commits
         for log_entry in self.repo.iter_commits("--no-merges", all=True):
             commit = self.repo.commit(log_entry)
 
@@ -136,6 +137,7 @@ class PhysicalProject:
 
             commit_timeline.append(key_commit_data)
 
+            # Store commit timeline data per contributor
             if commit_email not in commit_timeline_per_contributor:
                 commit_timeline_per_contributor[commit_email] = []
 
@@ -144,6 +146,7 @@ class PhysicalProject:
                 "stats_total": commit_stats_total
             })
 
+            # Store commit data stats per contributor
             if commit_email not in committers:
                 committers[commit_email] = {
                     "count": 0,
@@ -155,6 +158,7 @@ class PhysicalProject:
 
             Util.add_count_to_identifier(committers[commit_email], "count",
                                          add=1)
+            
             if return_data:
                 all_commits.append({
                     "author_email": commit.author.email.lower(),
@@ -321,6 +325,7 @@ class PhysicalProject:
                 path = path.split('/')
 
                 # Add data to certain tree node based of path
+                # TODO: Fix the repeating code
                 for index in range(0, len(path)):
                     if index == len(path) - 1:
                         sub_tree[path[index]] = {
@@ -331,6 +336,9 @@ class PhysicalProject:
                         sub_tree = sub_tree[path[index]]
             except Exception as e:
                 print('Failed to find contributors to ' + path + ' in git repository. The file is ignored.')
+
+                if allow_print:
+                    print('Exception is ' + str(e))
 
                 path = path.split('/')
 
@@ -521,8 +529,12 @@ class PhysicalProject:
 
                 contributions = self.__yield_file_contributions(file_path)
                 email_and_line_combined = list(contributions)
-            except Exception:
+            except Exception as e:
                 print('Failed to find contributors to ' + file_path + ' in git repository. The file is ignored.')
+
+                if allow_print:
+                    print('Exception is ' + str(e))
+                
                 continue
 
             file_suffix = pathlib.Path(file_path).suffix.lower()
