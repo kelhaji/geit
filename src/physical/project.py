@@ -336,7 +336,7 @@ class PhysicalProject:
                         sub_tree = sub_tree[path[index]]
             except Exception as e:
                 print('Failed to find contributors to ' + path + ' in git repository. The file is ignored.')
-                print('Exception is ' + e)
+                print('Exception is ' + str(e))
 
                 path = path.split('/')
 
@@ -529,7 +529,7 @@ class PhysicalProject:
                 email_and_line_combined = list(contributions)
             except Exception as e:
                 print('Failed to find contributors to ' + file_path + ' in git repository. The file is ignored.')
-                print('Exception is ' + e)
+                print('Exception is ' + str(e))
                 continue
 
             file_suffix = pathlib.Path(file_path).suffix.lower()
