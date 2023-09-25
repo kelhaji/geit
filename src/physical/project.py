@@ -336,11 +336,10 @@ class PhysicalProject:
                         sub_tree = sub_tree[path[index]]
             except Exception as e:
                 print('Failed to find contributors to ' + path + ' in git repository. The file is ignored.')
-                print(e)
+                print('Exception is ' + e)
 
                 path = path.split('/')
 
-                # TODO: Fix the repeating code
                 for index in range(0, len(path)):
                     if index == len(path) - 1:
                         sub_tree[path[index]] = {
@@ -530,7 +529,7 @@ class PhysicalProject:
                 email_and_line_combined = list(contributions)
             except Exception as e:
                 print('Failed to find contributors to ' + file_path + ' in git repository. The file is ignored.')
-                print(e)
+                print('Exception is ' + e)
                 continue
 
             file_suffix = pathlib.Path(file_path).suffix.lower()
